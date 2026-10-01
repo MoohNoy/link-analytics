@@ -41,7 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 
-# AI editor config
+# AI assistant config (auto-generated)
+.agents/
+.cursor/
+.devin/
+.claude/
 CLAUDE.md
 AGENTS.md
-.claude/

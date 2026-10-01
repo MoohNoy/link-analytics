@@ -1,0 +1,56 @@
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT,
+    "name" TEXT,
+    "image" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Link" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "targetUrl" TEXT NOT NULL,
+    "title" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Link_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Click" (
+    "id" BIGSERIAL NOT NULL,
+    "linkId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "country" TEXT,
+    "device" TEXT,
+    "browser" TEXT,
+    "referrer" TEXT,
+    "isBot" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Click_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Link_slug_key" ON "Link"("slug");
+
+-- CreateIndex
+CREATE INDEX "Link_userId_createdAt_idx" ON "Link"("userId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "Click_linkId_createdAt_idx" ON "Click"("linkId", "createdAt");
+
+-- AddForeignKey
+ALTER TABLE "Link" ADD CONSTRAINT "Link_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Click" ADD CONSTRAINT "Click_linkId_fkey" FOREIGN KEY ("linkId") REFERENCES "Link"("id") ON DELETE CASCADE ON UPDATE CASCADE;
